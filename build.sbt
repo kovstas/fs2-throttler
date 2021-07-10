@@ -46,7 +46,6 @@ ThisBuild / developers := List(
   )
 )
 ThisBuild / description := "Throttling for FS2 based on the Token bucket algorithm"
-ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
 
 ThisBuild / versionScheme := Some("early-semver")
 ThisBuild / scalafmtOnCompile := true
