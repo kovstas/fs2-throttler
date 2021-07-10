@@ -48,7 +48,7 @@ object Throttler {
     * @param elements - the allowed number of elements
     * @param duration - the period time in which emitted elements must meet
     * @param mode - the throttle mode [[ThrottleMode]]
-    * @return [[Pipe]]
+    * @return fs2.Pipe
     */
   def throttle[F[_]: Temporal, O](
       elements: Long,
@@ -63,7 +63,7 @@ object Throttler {
     * @param duration - the period time in which emitted elements must meet
     * @param mode - the throttle mode [[ThrottleMode]]
     * @param burst - increase the capacity threshold
-    * @return [[Pipe]]
+    * @return fs2.Pipe
     */
   def throttle[F[_]: Temporal, O](
       elements: Long,
@@ -80,7 +80,7 @@ object Throttler {
     * @param mode - the throttle mode [[ThrottleMode]]
     * @param burst - increase the capacity threshold
     * @param fnCost - calculate a cost of the element
-    * @return [[Pipe]]
+    * @return fs2.Pipe
     */
   def throttle[F[_]: Temporal, O](
       elements: Long,
