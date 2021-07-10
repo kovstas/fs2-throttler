@@ -3,21 +3,21 @@ ThisBuild / organization := "dev.kovstas"
 
 ThisBuild / scalaVersion := "2.13.6"
 ThisBuild / crossScalaVersions := List("2.12.14", "2.13.6", "3.0.1")
-scalacOptions ++= {
-  val cpus = sys.runtime.availableProcessors().toString
-  Seq(
+ThisBuild / scalacOptions ++= scalaOptions(scalaVersion.value)
+
+def scalaOptions(v: String) = {
+  val options = List(
     "-Xfatal-warnings",
-    "-Xlint:missing-interpolator",
-    "-language:implicitConversions",
     "-deprecation",
     "-feature",
     "-unchecked",
-    "-explaintypes",
-    "-language:higherKinds",
-    "-Ymacro-annotations",
-    "-Ybackend-parallelism",
-    cpus,
+    "-language:higherKinds"
   )
+
+  CrossVersion.partialVersion(v) match {
+    case Some((3, _)) => options :+ "-source:3.0-migration"
+    case _            => options
+  }
 }
 enablePlugins(AutomateHeaderPlugin)
 ThisBuild / startYear := Some(2021)
@@ -31,10 +31,10 @@ ThisBuild / scmInfo := Some(
 )
 ThisBuild / developers := List(
   Developer(
-    id    = "kovstas",
-    name  = "Stanislav Kovalenko",
+    id = "kovstas",
+    name = "Stanislav Kovalenko",
     email = "mail@kovstas.dev",
-    url   = url("https://kovstas.dev")
+    url = url("https://kovstas.dev")
   )
 )
 ThisBuild / description := "Throttling for FS2 based on the Token bucket algorithm"
