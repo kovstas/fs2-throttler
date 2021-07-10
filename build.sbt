@@ -5,6 +5,12 @@ ThisBuild / scalaVersion := "2.13.6"
 ThisBuild / crossScalaVersions := List("2.12.14", "2.13.6", "3.0.1")
 ThisBuild / scalacOptions ++= scalaOptions(scalaVersion.value)
 
+ThisBuild / libraryDependencies ++= Seq(
+  "co.fs2" %% "fs2-core" % "3.0.6",
+  "org.scalameta" %% "munit" % "0.7.27" % Test,
+  "org.typelevel" %% "cats-effect-testkit" % "3.1.1" % Test
+)
+
 def scalaOptions(v: String) = {
   val options = List(
     "-Xfatal-warnings",
@@ -20,8 +26,10 @@ def scalaOptions(v: String) = {
   }
 }
 enablePlugins(AutomateHeaderPlugin)
+
 ThisBuild / startYear := Some(2021)
 ThisBuild / organizationName := "Stanislav Kovalenko"
+
 ThisBuild / licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
 ThisBuild / scmInfo := Some(
   ScmInfo(
@@ -38,10 +46,7 @@ ThisBuild / developers := List(
   )
 )
 ThisBuild / description := "Throttling for FS2 based on the Token bucket algorithm"
-ThisBuild / scalafmtOnCompile := true
+ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
 
-ThisBuild / libraryDependencies ++= Seq(
-  "co.fs2" %% "fs2-core" % "3.0.6",
-  "org.scalameta" %% "munit" % "0.7.27" % Test,
-  "org.typelevel" %% "cats-effect-testkit" % "3.1.1" % Test
-)
+ThisBuild / versionScheme := Some("early-semver")
+ThisBuild / scalafmtOnCompile := true
