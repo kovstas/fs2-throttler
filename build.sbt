@@ -30,7 +30,8 @@ enablePlugins(AutomateHeaderPlugin)
 ThisBuild / startYear := Some(2021)
 ThisBuild / organizationName := "Stanislav Kovalenko"
 
-ThisBuild / licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
+ThisBuild / homepage := Some(url("https://github.com/kovstas/fs2-throttler"))
+ThisBuild / licenses := List("MIT" -> url("http://opensource.org/licenses/MIT"))
 ThisBuild / scmInfo := Some(
   ScmInfo(
     url("https://github.com/kovstas/fs2-throttler"),
