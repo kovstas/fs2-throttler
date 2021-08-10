@@ -98,8 +98,8 @@ object Throttler {
     ): Pull[F, O, Unit] = {
       s.pull.uncons1.flatMap {
         case Some((head, tail)) =>
-          val delayPull = Pull.eval {
-            for {
+          Pull
+            .eval(for {
               cost <- fnCost(head)
               now <- Clock[F].monotonic
               delay <- bucket.modify { case (tokens, lastUpdate) =>
@@ -122,25 +122,20 @@ object Throttler {
                   ((0, now + delay), delay)
                 }
               }
-            } yield delay
-          }
-
-          for {
-            delay <- delayPull
-            continueF = Pull.output1(head) >> go(tail, bucket, capacity, interval)
-            result <- {
-              if (delay == Duration.Zero) {
-                continueF
-              } else {
-                mode match {
-                  case Enforcing =>
-                    go(tail, bucket, capacity, interval)
-                  case Shaping =>
-                    Pull.sleep(delay) >> continueF
+              continueF = Pull.output1(head) >> go(tail, bucket, capacity, interval)
+              result <-
+                if (delay == Duration.Zero) {
+                  Applicative[F].pure(continueF)
+                } else {
+                  mode match {
+                    case Enforcing =>
+                      Applicative[F].pure(go(tail, bucket, capacity, interval))
+                    case Shaping =>
+                      Clock[F].delayBy(Applicative[F].pure(continueF), delay)
+                  }
                 }
-              }
-            }
-          } yield result
+            } yield result)
+            .flatMap(identity)
 
         case None =>
           Pull.done
