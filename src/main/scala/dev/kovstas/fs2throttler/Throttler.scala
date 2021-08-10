@@ -135,7 +135,7 @@ object Throttler {
                   }
                 }
             } yield result)
-            .flatten
+            .flatMap(identity)
 
         case None =>
           Pull.done

@@ -2,7 +2,7 @@ ThisBuild / name := "fs2-throttler"
 ThisBuild / organization := "dev.kovstas"
 
 ThisBuild / scalaVersion := "2.13.6"
-ThisBuild / crossScalaVersions := List("2.13.6", "3.0.1")
+ThisBuild / crossScalaVersions := List("2.12.14", "2.13.6", "3.0.1")
 ThisBuild / scalacOptions ++= scalaOptions(scalaVersion.value)
 
 ThisBuild / libraryDependencies ++= Seq(
