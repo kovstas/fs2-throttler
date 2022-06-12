@@ -47,13 +47,13 @@ class ThrottlerSpec extends munit.FunSuite {
 
     ctx.tick()
     assertEquals(elements.toList, List(0))
-    ctx.tick(100.millis)
+    ctx.advanceAndTick(100.millis)
     assertEquals(elements.toList, List(0, 1))
-    ctx.tick(100.millis)
+    ctx.advanceAndTick(100.millis)
     assertEquals(elements.toList, List(0, 1, 2))
-    ctx.tick(100.millis)
+    ctx.advanceAndTick(100.millis)
     assertEquals(elements.toList, List(0, 1, 2, 3))
-    ctx.tick(100.millis)
+    ctx.advanceAndTick(100.millis)
     assertEquals(elements.toList, List(0, 1, 2, 3, 4))
   }
 
@@ -72,13 +72,13 @@ class ThrottlerSpec extends munit.FunSuite {
 
     ctx.tick()
     assertEquals(elements.toList, List(0))
-    ctx.tick(1.nano)
+    ctx.advanceAndTick(1.nano)
     assertEquals(elements.toList, List(0, 1))
-    ctx.tick(1.nano)
+    ctx.advanceAndTick(1.nano)
     assertEquals(elements.toList, List(0, 1, 2))
-    ctx.tick(1.nano)
+    ctx.advanceAndTick(1.nano)
     assertEquals(elements.toList, List(0, 1, 2, 3))
-    ctx.tick(1.nano)
+    ctx.advanceAndTick(1.nano)
     assertEquals(elements.toList, List(0, 1, 2, 3, 4))
   }
 
@@ -97,13 +97,13 @@ class ThrottlerSpec extends munit.FunSuite {
 
     ctx.tick()
     assertEquals(elements.toList, List(0))
-    ctx.tick(100.days)
+    ctx.advanceAndTick(100.days)
     assertEquals(elements.toList, List(0, 1))
-    ctx.tick(100.days)
+    ctx.advanceAndTick(100.days)
     assertEquals(elements.toList, List(0, 1, 2))
-    ctx.tick(100.days)
+    ctx.advanceAndTick(100.days)
     assertEquals(elements.toList, List(0, 1, 2, 3))
-    ctx.tick(100.days)
+    ctx.advanceAndTick(100.days)
     assertEquals(elements.toList, List(0, 1, 2, 3, 4))
   }
 
@@ -122,9 +122,9 @@ class ThrottlerSpec extends munit.FunSuite {
 
     ctx.tick()
     assertEquals(elements.toList, List(0, 1))
-    ctx.tick(2.seconds)
+    ctx.advanceAndTick(2.seconds)
     assertEquals(elements.toList, List(0, 1, 2, 3))
-    ctx.tick(4.seconds)
+    ctx.advanceAndTick(4.seconds)
     assertEquals(elements.toList, List(0, 1, 2, 3, 4, 5, 6))
   }
 
@@ -141,7 +141,7 @@ class ThrottlerSpec extends munit.FunSuite {
       .drain
       .unsafeToFuture()(runtime)
 
-    ctx.tick(300.millis)
+    ctx.advanceAndTick(300.millis)
     assertEquals(elements.toList, List(0))
   }
 
@@ -168,19 +168,19 @@ class ThrottlerSpec extends munit.FunSuite {
 
     ctx.tick()
     assertEquals(elements.toList, List(0))
-    ctx.tick(1.seconds)
+    ctx.advanceAndTick(1.seconds)
     assertEquals(elements.toList, List(0, 1))
-    ctx.tick(1.seconds)
+    ctx.advanceAndTick(1.seconds)
     assertEquals(elements.toList, List(0, 1))
-    ctx.tick(1.seconds)
+    ctx.advanceAndTick(1.seconds)
     assertEquals(elements.toList, List(0, 1, 2))
-    ctx.tick(1.seconds)
+    ctx.advanceAndTick(1.seconds)
     assertEquals(elements.toList, List(0, 1, 2))
-    ctx.tick(2.seconds)
+    ctx.advanceAndTick(2.seconds)
     assertEquals(elements.toList, List(0, 1, 2, 3))
-    ctx.tick(1.seconds)
+    ctx.advanceAndTick(1.seconds)
     assertEquals(elements.toList, List(0, 1, 2, 3))
-    ctx.tick(3.seconds)
+    ctx.advanceAndTick(3.seconds)
     assertEquals(elements.toList, List(0, 1, 2, 3, 4))
 
   }

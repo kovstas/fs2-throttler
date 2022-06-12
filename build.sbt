@@ -1,14 +1,14 @@
-ThisBuild / name := "fs2-throttler"
-ThisBuild / organization := "dev.kovstas"
+name := "fs2-throttler"
+organization := "dev.kovstas"
 
-ThisBuild / scalaVersion := "2.13.6"
-ThisBuild / crossScalaVersions := List("2.12.14", "2.13.6", "3.0.1")
-ThisBuild / scalacOptions ++= scalaOptions(scalaVersion.value)
+scalaVersion := "2.13.8"
+crossScalaVersions := List("2.12.16", "2.13.8", "3.1.2")
+scalacOptions ++= scalaOptions(scalaVersion.value)
 
-ThisBuild / libraryDependencies ++= Seq(
-  "co.fs2" %% "fs2-core" % "3.1.0",
-  "org.scalameta" %% "munit" % "0.7.27" % Test,
-  "org.typelevel" %% "cats-effect-testkit" % "3.2.2" % Test
+libraryDependencies ++= Seq(
+  "co.fs2" %% "fs2-core" % "3.2.7",
+  "org.scalameta" %% "munit" % "0.7.29" % Test,
+  "org.typelevel" %% "cats-effect-testkit" % "3.3.11" % Test
 )
 
 def scalaOptions(v: String) = {
@@ -27,18 +27,18 @@ def scalaOptions(v: String) = {
 }
 enablePlugins(AutomateHeaderPlugin)
 
-ThisBuild / startYear := Some(2021)
-ThisBuild / organizationName := "Stanislav Kovalenko"
+startYear := Some(2021)
+organizationName := "Stanislav Kovalenko"
 
-ThisBuild / homepage := Some(url("https://github.com/kovstas/fs2-throttler"))
-ThisBuild / licenses := List("MIT" -> url("http://opensource.org/licenses/MIT"))
-ThisBuild / scmInfo := Some(
+homepage := Some(url("https://github.com/kovstas/fs2-throttler"))
+licenses := List("MIT" -> url("http://opensource.org/licenses/MIT"))
+scmInfo := Some(
   ScmInfo(
     url("https://github.com/kovstas/fs2-throttler"),
     "scm:git@github.com:kovstas/fs2-throttler.git"
   )
 )
-ThisBuild / developers := List(
+developers := List(
   Developer(
     id = "kovstas",
     name = "Stanislav Kovalenko",
@@ -46,7 +46,7 @@ ThisBuild / developers := List(
     url = url("https://kovstas.dev")
   )
 )
-ThisBuild / description := "Throttling for FS2 based on the Token bucket algorithm"
+description := "Throttling for FS2 based on the Token bucket algorithm"
 sonatypeCredentialHost := "s01.oss.sonatype.org"
-ThisBuild / versionScheme := Some("early-semver")
-ThisBuild / scalafmtOnCompile := true
+versionScheme := Some("early-semver")
+scalafmtOnCompile := true
