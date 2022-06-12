@@ -123,7 +123,7 @@ class ThrottlerSpec extends munit.FunSuite {
     ctx.tick()
     assertEquals(elements.toList, List(0, 1))
     ctx.advanceAndTick(2.seconds)
-    assertEquals(elements.toList, List(0, 1, 2, 3))
+    assertEquals(elements.toList, List(0, 1, 2, 3, 4))
     ctx.advanceAndTick(4.seconds)
     assertEquals(elements.toList, List(0, 1, 2, 3, 4, 5, 6))
   }
@@ -183,6 +183,42 @@ class ThrottlerSpec extends munit.FunSuite {
     ctx.advanceAndTick(3.seconds)
     assertEquals(elements.toList, List(0, 1, 2, 3, 4))
 
+  }
+
+  test("Throttler should not throttle if the number of elements is zero") {
+
+    val (ctx, runtime) = createDeterministicRuntime
+    val elements = ListBuffer[Int]()
+
+    Stream
+      .range(0, 5)
+      .covary[IO]
+      .through(throttle(0, 1.second, Shaping, 0))
+      .map(elements += _)
+      .compile
+      .drain
+      .unsafeToFuture()(runtime)
+
+    ctx.tick()
+    assertEquals(elements.toList, List(0, 1, 2, 3, 4))
+  }
+
+  test("Throttler should not throttle if the duration is zero") {
+
+    val (ctx, runtime) = createDeterministicRuntime
+    val elements = ListBuffer[Int]()
+
+    Stream
+      .range(0, 5)
+      .covary[IO]
+      .through(throttle(1, 0.second, Shaping, 0))
+      .map(elements += _)
+      .compile
+      .drain
+      .unsafeToFuture()(runtime)
+
+    ctx.tick()
+    assertEquals(elements.toList, List(0, 1, 2, 3, 4))
   }
 
   private def createDeterministicRuntime: (TestContext, IORuntime) = {

@@ -103,23 +103,27 @@ object Throttler {
               cost <- fnCost(head)
               now <- Clock[F].monotonic
               delay <- bucket.modify { case (tokens, lastUpdate) =>
-                val elapsed = (now - lastUpdate).toNanos
-                val tokensArrived =
-                  if (elapsed >= interval) {
-                    elapsed / interval
-                  } else 0
-
-                val nextTime = lastUpdate + (tokensArrived * interval).nanos
-                val available = math.min(tokens + tokensArrived, capacity)
-
-                if (cost <= available) {
-                  ((available - cost, nextTime), Duration.Zero)
+                if (interval == 0) {
+                  ((0, now), Duration.Zero)
                 } else {
-                  val timePassed = now.toNanos - nextTime.toNanos
-                  val waitingTime = (cost - available) * interval
-                  val delay = (waitingTime - timePassed).nanos
+                  val elapsed = (now - lastUpdate).toNanos
+                  val tokensArrived =
+                    if (elapsed >= interval) {
+                      elapsed / interval
+                    } else 0
 
-                  ((0, now + delay), delay)
+                  val nextTime = lastUpdate + (tokensArrived * interval).nanos
+                  val available = math.min(tokens + tokensArrived, capacity)
+
+                  if (cost <= available) {
+                    ((available - cost, nextTime), Duration.Zero)
+                  } else {
+                    val timePassed = now.toNanos - nextTime.toNanos
+                    val waitingTime = (cost - available) * interval
+                    val delay = (waitingTime - timePassed).nanos
+
+                    ((0, now + delay), delay)
+                  }
                 }
               }
               continueF = Pull.output1(head) >> go(tail, bucket, capacity, interval)
@@ -143,7 +147,7 @@ object Throttler {
     }
 
     in =>
-      val capacity = if (elements + burst < 0) Long.MaxValue else elements + burst
+      val capacity = if (elements + burst <= 0) Long.MaxValue else elements + burst
 
       for {
         bucket <- Stream.eval(
@@ -151,7 +155,7 @@ object Throttler {
             Clock[F].monotonic.map((capacity, _))
           )
         )
-        stream <- go(in, bucket, capacity, duration.toNanos / elements).stream
+        stream <- go(in, bucket, capacity, duration.toNanos / capacity).stream
       } yield stream
 
   }
