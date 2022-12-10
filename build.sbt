@@ -1,8 +1,8 @@
 name := "fs2-throttler"
 organization := "dev.kovstas"
 
-scalaVersion := "2.13.8"
-crossScalaVersions := List("2.12.16", "2.13.8", "3.1.2")
+scalaVersion := "2.13.10"
+crossScalaVersions := List("2.12.16", "2.13.10", "3.1.2")
 scalacOptions ++= scalaOptions(scalaVersion.value)
 
 libraryDependencies ++= Seq(
