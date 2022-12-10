@@ -8,7 +8,7 @@ scalacOptions ++= scalaOptions(scalaVersion.value)
 libraryDependencies ++= Seq(
   "co.fs2" %% "fs2-core" % "3.2.7",
   "org.scalameta" %% "munit" % "0.7.29" % Test,
-  "org.typelevel" %% "cats-effect-testkit" % "3.3.11" % Test
+  "org.typelevel" %% "cats-effect-testkit" % "3.3.14" % Test
 )
 
 def scalaOptions(v: String) = {
