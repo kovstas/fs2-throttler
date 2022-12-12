@@ -43,11 +43,11 @@ object Throttler {
     */
   case object Enforcing extends ThrottleMode
 
-  /** Throttles elements of the stream according to the given rate using the token bucket algorithm.
+  /** The pipe that uses the token bucket algorithm to throttle elements of the stream according to the given rate.
     *
-    * @param elements - the allowed number of elements
-    * @param duration - the period time in which emitted elements must meet
-    * @param mode - the throttle mode [[ThrottleMode]]
+    * @param elements the allowed number of elements
+    * @param duration the period time in which emitted elements must meet
+    * @param mode the throttle mode [[ThrottleMode]]
     * @return fs2.Pipe
     */
   def throttle[F[_]: Temporal, O](
@@ -57,12 +57,12 @@ object Throttler {
   ): Pipe[F, O, O] =
     throttle(elements, duration, mode, 0, (_: O) => Applicative[F].pure(1L))
 
-  /** Throttles elements of the stream according to the given rate using the token bucket algorithm.
+  /** The pipe that uses the token bucket algorithm to throttle elements of the stream according to the given rate.
     *
-    * @param elements - the allowed number of elements
-    * @param duration - the period time in which emitted elements must meet
-    * @param mode - the throttle mode [[ThrottleMode]]
-    * @param burst - increase the capacity threshold
+    * @param elements the allowed number of elements
+    * @param duration the period time in which emitted elements must meet
+    * @param mode the throttle mode [[ThrottleMode]]
+    * @param burst increase the capacity threshold
     * @return fs2.Pipe
     */
   def throttle[F[_]: Temporal, O](
@@ -73,13 +73,13 @@ object Throttler {
   ): Pipe[F, O, O] =
     throttle(elements, duration, mode, burst, (_: O) => Applicative[F].pure(1L))
 
-  /** Throttles elements of the stream according to the given rate using the token bucket algorithm.
+  /** The pipe that uses the token bucket algorithm to throttle elements of the stream according to the given rate, the burst and elements cost.
     *
-    * @param elements - the allowed number of elements
-    * @param duration - the period time in which emitted elements must meet
-    * @param mode - the throttle mode [[ThrottleMode]]
-    * @param burst - increase the capacity threshold
-    * @param fnCost - calculate a cost of the element
+    * @param elements the allowed number of elements
+    * @param duration the period time in which emitted elements must meet
+    * @param mode the throttle mode [[ThrottleMode]]
+    * @param burst increase the capacity threshold
+    * @param fnCost calculate a cost of the element
     * @return fs2.Pipe
     */
   def throttle[F[_]: Temporal, O](
