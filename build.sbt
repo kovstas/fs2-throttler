@@ -1,5 +1,3 @@
-import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
-
 ThisBuild / organization := "dev.kovstas"
 
 ThisBuild / scalaVersion := "2.13.10"
