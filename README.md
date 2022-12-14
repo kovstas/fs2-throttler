@@ -7,7 +7,7 @@ Throttling for [FS2](https://fs2.io) based on the [Token bucket](https://en.wiki
 
 This implementation supports:
 - burst in the processing of elements
-- calculating a cost for every element of the stream
+- calculates a cost for every element of the stream
 - two throttle modes (Shaping / Enforcing)
 
 ## Install

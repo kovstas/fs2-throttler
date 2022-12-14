@@ -1,15 +1,23 @@
-name := "fs2-throttler"
-organization := "dev.kovstas"
+ThisBuild / organization := "dev.kovstas"
 
-scalaVersion := "2.13.8"
-crossScalaVersions := List("2.12.16", "2.13.8", "3.1.2")
-scalacOptions ++= scalaOptions(scalaVersion.value)
+ThisBuild / scalaVersion := "2.13.10"
+ThisBuild / crossScalaVersions := List("2.12.17", "2.13.10", "3.2.1")
+ThisBuild / scalacOptions ++= scalaOptions(scalaVersion.value)
 
-libraryDependencies ++= Seq(
-  "co.fs2" %% "fs2-core" % "3.2.14",
+ThisBuild / libraryDependencies ++= Seq(
+  "co.fs2" %% "fs2-core" % "3.4.0",
   "org.scalameta" %% "munit" % "0.7.29" % Test,
-  "org.typelevel" %% "cats-effect-testkit" % "3.3.11" % Test
+  "org.typelevel" %% "cats-effect-testkit" % "3.4.1" % Test
 )
+
+lazy val root =
+  crossProject(JSPlatform, JVMPlatform, NativePlatform)
+    .crossType(CrossType.Pure)
+    .withoutSuffixFor(JVMPlatform)
+    .settings(
+      name := "fs2-throttler"
+    )
+    .in(file("."))
 
 def scalaOptions(v: String) = {
   val options = List(
@@ -27,18 +35,18 @@ def scalaOptions(v: String) = {
 }
 enablePlugins(AutomateHeaderPlugin)
 
-startYear := Some(2021)
-organizationName := "Stanislav Kovalenko"
+ThisBuild / startYear := Some(2021)
+ThisBuild / organizationName := "Stanislav Kovalenko"
 
-homepage := Some(url("https://github.com/kovstas/fs2-throttler"))
-licenses := List("MIT" -> url("http://opensource.org/licenses/MIT"))
-scmInfo := Some(
+ThisBuild / homepage := Some(url("https://github.com/kovstas/fs2-throttler"))
+ThisBuild / licenses := List("MIT" -> url("http://opensource.org/licenses/MIT"))
+ThisBuild / scmInfo := Some(
   ScmInfo(
     url("https://github.com/kovstas/fs2-throttler"),
     "scm:git@github.com:kovstas/fs2-throttler.git"
   )
 )
-developers := List(
+ThisBuild / developers := List(
   Developer(
     id = "kovstas",
     name = "Stanislav Kovalenko",
@@ -46,7 +54,7 @@ developers := List(
     url = url("https://kovstas.dev")
   )
 )
-description := "Throttling for FS2 based on the Token bucket algorithm"
-sonatypeCredentialHost := "s01.oss.sonatype.org"
-versionScheme := Some("early-semver")
-scalafmtOnCompile := true
+ThisBuild / description := "Throttling for FS2 based on the Token bucket algorithm"
+ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
+ThisBuild / versionScheme := Some("early-semver")
+ThisBuild / scalafmtOnCompile := true

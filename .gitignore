@@ -1,3 +1,6 @@
 .bsp
 .idea
 target
+.js
+.jvm
+.native
