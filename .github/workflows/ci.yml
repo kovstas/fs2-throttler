@@ -54,9 +54,6 @@ jobs:
         if: (matrix.project == 'rootNative') && startsWith(matrix.os, 'ubuntu')
         run: /home/linuxbrew/.linuxbrew/bin/brew install openssl s2n
 
-      - name: Check that workflows are up to date
-        run: sbt githubWorkflowCheck
-
       - name: Check headers and formatting
         if: matrix.java == 'temurin@17'
         run: sbt 'project ${{ matrix.project }}' '++ ${{ matrix.scala }}' headerCheckAll scalafmtCheckAll 'project /' scalafmtSbtCheck
