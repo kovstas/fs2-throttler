@@ -1,6 +1,5 @@
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
-name := "fs2-throttler"
 ThisBuild / organization := "dev.kovstas"
 
 ThisBuild / scalaVersion := "2.13.10"
@@ -13,14 +12,13 @@ ThisBuild / libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-effect-testkit" % "3.4.1" % Test
 )
 
-lazy val root = project
-  .in(file("."))
-  .aggregate(lib.js, lib.jvm, lib.native)
-
-lazy val lib =
+lazy val root =
   crossProject(JSPlatform, JVMPlatform, NativePlatform)
     .crossType(CrossType.Pure)
     .withoutSuffixFor(JVMPlatform)
+    .settings(
+      name := "fs2-throttler"
+    )
     .in(file("."))
 
 def scalaOptions(v: String) = {
