@@ -1,7 +1,7 @@
 ThisBuild / organization := "dev.kovstas"
 
 ThisBuild / scalaVersion := "2.13.10"
-ThisBuild / crossScalaVersions := List("2.12.17", "2.13.10", "3.2.1")
+ThisBuild / crossScalaVersions := List("2.12.17", "2.13.10", "3.2.2")
 ThisBuild / scalacOptions ++= scalaOptions(scalaVersion.value)
 
 ThisBuild / libraryDependencies ++= Seq(
