@@ -15,7 +15,7 @@ This implementation supports:
 ## Install
 
 ```scala
-libraryDependencies += "dev.kovstas" % "fs2-throttler" % Version
+libraryDependencies += "dev.kovstas" %% "fs2-throttler" % Version
 ```
 
 ## Usage
