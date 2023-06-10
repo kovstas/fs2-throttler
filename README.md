@@ -14,14 +14,27 @@ This implementation supports:
 
 ## Install
 
+Add the following to your `build.sbt` file:
 ```scala
 libraryDependencies += "dev.kovstas" %% "fs2-throttler" % Version
 ```
 
 ## Usage
+
+To use the throttler, import the throttle function and apply it to your stream:
 ```scala
+import cats.effect.IO
+import fs2.Stream
+import scala.concurrent.duration._
 import dev.kovstas.fs2throttler.Throttler._
 
-stream.through(throttle(1, 1.second, Shaping))
+val stream = Stream(1, 2, 3, 4, 5)
+
+stream.through(throttle(2, 1.second, Shaping))
+
+stream.through(throttle(2, 1.second, Enforcing))
+
+val costFunction: Int => Long = i => i.toLong
+val throttledCostStream = stream.through(throttle(2, 1.second, Shaping, costFunction))
 ```
-More examples you can find in tests.
+For more examples, please refer to the tests.

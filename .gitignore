@@ -4,3 +4,7 @@ target
 .js
 .jvm
 .native
+.bloop
+.metals
+.vscode
+metals.sbt
