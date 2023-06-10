@@ -30,9 +30,8 @@ import dev.kovstas.fs2throttler.Throttler._
 
 val stream = Stream(1, 2, 3, 4, 5)
 
-stream.through(throttle(2, 1.second, Shaping))
-
-stream.through(throttle(2, 1.second, Enforcing))
+val shapedStream = stream.through(throttle(2, 1.second, Shaping))
+val enforcedStream = stream.through(throttle(2, 1.second, Enforcing))
 
 val costFunction: Int => Long = i => i.toLong
 val throttledCostStream = stream.through(throttle(2, 1.second, Shaping, costFunction))
