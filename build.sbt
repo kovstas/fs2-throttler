@@ -5,9 +5,9 @@ ThisBuild / crossScalaVersions := List("2.12.18", "2.13.12", "3.3.0")
 ThisBuild / scalacOptions ++= scalaOptions(scalaVersion.value)
 
 ThisBuild / libraryDependencies ++= Seq(
-  "co.fs2" %% "fs2-core" % "3.9.1",
+  "co.fs2" %% "fs2-core" % "3.9.2",
   "org.scalameta" %% "munit" % "0.7.29" % Test,
-  "org.typelevel" %% "cats-effect-testkit" % "3.5.1" % Test
+  "org.typelevel" %% "cats-effect-testkit" % "3.5.2" % Test
 )
 
 lazy val root =
