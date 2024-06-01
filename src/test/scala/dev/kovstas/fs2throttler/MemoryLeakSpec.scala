@@ -38,7 +38,7 @@ class MemoryLeakSpec extends FunSuite {
   case class LeakTestParams(
       warmupIterations: Int = 3,
       samplePeriod: FiniteDuration = 1.seconds,
-      monitorPeriod: FiniteDuration = 20.seconds,
+      monitorPeriod: FiniteDuration = 10.seconds,
       limitTotalBytesIncreasePerSecond: Long = 700000,
       limitConsecutiveIncreases: Int = 10
   )
