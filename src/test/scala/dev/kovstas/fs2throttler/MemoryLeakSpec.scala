@@ -139,14 +139,14 @@ class MemoryLeakSpec extends FunSuite {
     Stream
       .range(0, 1000000)
       .covary[IO]
-      .through(Throttler.throttle(100, 100.millis, Enforcing))
+      .through(Throttler.throttle(100, 10.millis, Enforcing))
   }
 
   leakTest("Throttler.throttle shaping") {
     Stream
       .range(0, 1000000)
       .covary[IO]
-      .through(Throttler.throttle(100, 100.millis, Shaping))
+      .through(Throttler.throttle(100, 10.millis, Shaping))
   }
 
 }
