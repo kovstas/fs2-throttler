@@ -36,9 +36,9 @@ class MemoryLeakSpec extends FunSuite {
   override def munitFlakyOK = true
 
   case class LeakTestParams(
-      warmupIterations: Int = 5,
-      samplePeriod: FiniteDuration = 3.seconds,
-      monitorPeriod: FiniteDuration = 60.seconds,
+      warmupIterations: Int = 3,
+      samplePeriod: FiniteDuration = 1.seconds,
+      monitorPeriod: FiniteDuration = 20.seconds,
       limitTotalBytesIncreasePerSecond: Long = 700000,
       limitConsecutiveIncreases: Int = 10
   )

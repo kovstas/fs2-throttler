@@ -6,7 +6,7 @@ ThisBuild / scalacOptions ++= scalaOptions(scalaVersion.value)
 
 ThisBuild / libraryDependencies ++= Seq(
   "co.fs2" %% "fs2-core" % "3.10.2",
-  "org.scalameta" %% "munit" % "0.7.29" % Test,
+  "org.scalameta" %% "munit" % "1.0.0" % Test,
   "org.typelevel" %% "cats-effect-testkit" % "3.5.4" % Test
 )
 
