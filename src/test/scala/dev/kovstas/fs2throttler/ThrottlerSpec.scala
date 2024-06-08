@@ -121,6 +121,7 @@ class ThrottlerSpec extends munit.FunSuite {
       .unsafeToFuture()(runtime)
 
     ctx.tick()
+    ctx.advanceAndTick(500.millis)
     assertEquals(elements.toList, List(0, 1))
     ctx.advanceAndTick(2.seconds)
     assertEquals(elements.toList, List(0, 1, 2, 3, 4))
