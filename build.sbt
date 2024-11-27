@@ -7,7 +7,7 @@ ThisBuild / scalacOptions ++= scalaOptions(scalaVersion.value)
 ThisBuild / libraryDependencies ++= Seq(
   "co.fs2" %% "fs2-core" % "3.11.0",
   "org.scalameta" %% "munit" % "1.0.2" % Test,
-  "org.typelevel" %% "cats-effect-testkit" % "3.5.6" % Test
+  "org.typelevel" %% "cats-effect-testkit" % "3.5.7" % Test
 )
 
 lazy val root =
