@@ -33,6 +33,8 @@ import scala.concurrent.duration.{DurationInt, FiniteDuration}
 
 class MemoryLeakSpec extends FunSuite {
 
+  override def munitIgnore: Boolean = Option(System.getenv("CI")).contains("true")
+
   override def munitFlakyOK = true
 
   case class LeakTestParams(

@@ -28,6 +28,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup sbt
+        uses: sbt/setup-sbt@v1
+
       - name: Setup Java (temurin@17)
         id: setup-java-temurin-17
         if: matrix.java == 'temurin@17'
@@ -75,6 +78,7 @@ jobs:
           name: target-${{ matrix.os }}-${{ matrix.java }}-${{ matrix.scala }}-${{ matrix.project }}
           path: targets.tar
           key: ${{ runner.os }}-target-${{ matrix.os }}-${{ matrix.java }}-${{ matrix.scala }}-${{ matrix.project }}
+
   publish:
     name: Publish Artifacts
     needs: [ build ]
@@ -98,92 +102,32 @@ jobs:
           distribution: temurin
           java-version: 17
           cache: sbt
-          
+
+      - name: Install sbt
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y apt-transport-https curl gnupg
+          echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | sudo tee /etc/apt/sources.list.d/sbt.list
+          echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | sudo tee /etc/apt/sources.list.d/sbt_old.list
+          curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | sudo apt-key add
+          sudo apt-get update
+          sudo apt-get install -y sbt
+
       - name: sbt update
         if: matrix.java == 'temurin@17' && steps.setup-java-temurin-17.outputs.cache-hit == 'false'
         run: sbt +update
 
-      - name: Download target directories (3.3, rootJS)
-        uses: actions/download-artifact@v4
-        with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-3.3-rootJS
-
-      - name: Inflate target directories (3.3, rootJS)
+      - name: Download and inflate target directories
         run: |
-          tar xf targets.tar
-          rm targets.tar
-      - name: Download target directories (3.3, root)
-        uses: actions/download-artifact@v4
-        with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-3.3-root
+          for version in 3.3 2.12 2.13; do
+            for project in rootJS root rootNative; do
+              if [ -f "target-${{ matrix.os }}-${{ matrix.java }}-$version-$project.tar" ]; then
+                tar xf "target-${{ matrix.os }}-${{ matrix.java }}-$version-$project.tar"
+                rm "target-${{ matrix.os }}-${{ matrix.java }}-$version-$project.tar"
+              fi
+            done
+          done
 
-      - name: Inflate target directories (3.3, root)
-        run: |
-          tar xf targets.tar
-          rm targets.tar
-      - name: Download target directories (3.3, rootNative)
-        uses: actions/download-artifact@v4
-        with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-3.3-rootNative
-
-      - name: Inflate target directories (3.3, rootNative)
-        run: |
-          tar xf targets.tar
-          rm targets.tar
-      - name: Download target directories (2.12, rootJS)
-        uses: actions/download-artifact@v4
-        with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12-rootJS
-
-      - name: Inflate target directories (2.12, rootJS)
-        run: |
-          tar xf targets.tar
-          rm targets.tar
-      - name: Download target directories (2.12, root)
-        uses: actions/download-artifact@v4
-        with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12-root
-
-      - name: Inflate target directories (2.12, root)
-        run: |
-          tar xf targets.tar
-          rm targets.tar
-      - name: Download target directories (2.12, rootNative)
-        uses: actions/download-artifact@v4
-        with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12-rootNative
-
-      - name: Inflate target directories (2.12, rootNative)
-        run: |
-          tar xf targets.tar
-          rm targets.tar
-      - name: Download target directories (2.13, rootJS)
-        uses: actions/download-artifact@v4
-        with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13-rootJS
-
-      - name: Inflate target directories (2.13, rootJS)
-        run: |
-          tar xf targets.tar
-          rm targets.tar
-      - name: Download target directories (2.13, root)
-        uses: actions/download-artifact@v4
-        with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13-root
-
-      - name: Inflate target directories (2.13, root)
-        run: |
-          tar xf targets.tar
-          rm targets.tar
-      - name: Download target directories (2.13, rootNative)
-        uses: actions/download-artifact@v4
-        with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13-rootNative
-
-      - name: Inflate target directories (2.13, rootNative)
-        run: |
-          tar xf targets.tar
-          rm targets.tar
       - name: Publish
         run: sbt '++ ${{ matrix.scala }}' ci-release
         env:
