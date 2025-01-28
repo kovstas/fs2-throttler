@@ -1,12 +1,12 @@
 ThisBuild / organization := "dev.kovstas"
 
-ThisBuild / scalaVersion := "2.13.15"
-ThisBuild / crossScalaVersions := List("2.12.20", "2.13.15", "3.3.4")
+ThisBuild / scalaVersion := "2.13.16"
+ThisBuild / crossScalaVersions := List("2.12.20", "2.13.16", "3.3.4")
 ThisBuild / scalacOptions ++= scalaOptions(scalaVersion.value)
 
 ThisBuild / libraryDependencies ++= Seq(
   "co.fs2" %% "fs2-core" % "3.11.0",
-  "org.scalameta" %% "munit" % "1.0.3" % Test,
+  "org.scalameta" %% "munit" % "1.1.0" % Test,
   "org.typelevel" %% "cats-effect-testkit" % "3.5.7" % Test
 )
 
