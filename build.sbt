@@ -55,5 +55,11 @@ ThisBuild / developers := List(
   )
 )
 ThisBuild / description := "Throttling for FS2 based on the Token bucket algorithm"
+// Note: With sbt-ci-release 1.11.2+, the default sonatypeCredentialHost is "central.sonatype.com"
+// (the new Sonatype Central Portal). The old "s01.oss.sonatype.org" endpoint is being sunset.
+// IMPORTANT: You must update GitHub secrets SONATYPE_USERNAME and SONATYPE_PASSWORD to use
+// the user token from https://central.sonatype.com/ (not the old account credentials).
+// Until secrets are updated, temporarily keep the old endpoint to avoid CI failures:
+ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
 ThisBuild / versionScheme := Some("early-semver")
 ThisBuild / scalafmtOnCompile := true
