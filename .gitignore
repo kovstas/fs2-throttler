@@ -8,4 +8,4 @@ target
 .metals
 .vscode
 metals.sbt
-sbt
+/sbt
