@@ -5,7 +5,7 @@ ThisBuild / crossScalaVersions := List("2.12.21", "2.13.18", "3.3.7")
 ThisBuild / scalacOptions ++= scalaOptions(scalaVersion.value)
 
 ThisBuild / libraryDependencies ++= Seq(
-  "co.fs2" %% "fs2-core" % "3.12.2",
+  "co.fs2" %% "fs2-core" % "3.13.0",
   "org.scalameta" %% "munit" % "1.2.4" % Test,
   "org.typelevel" %% "cats-effect-testkit" % "3.7.0" % Test
 )
