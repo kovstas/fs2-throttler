@@ -49,10 +49,6 @@ jobs:
         if: steps.setup-java-temurin-25.outputs.cache-hit == 'false'
         run: sbt '${{ matrix.target.project }}/update'
 
-      - name: Install brew formulae (ubuntu)
-        if: matrix.target.platform == 'native'
-        run: /home/linuxbrew/.linuxbrew/bin/brew install openssl s2n
-
       - name: Check headers and formatting
         run: sbt '${{ matrix.target.project }}/headerCheckAll; ${{ matrix.target.project }}/scalafmtCheckAll; scalafmtSbtCheck'
 
