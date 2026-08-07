@@ -19,13 +19,13 @@ jobs:
         target:
           - { project: root2_12, scala: "2.12", platform: jvm }
           - { project: root2_13, scala: "2.13", platform: jvm }
-          - { project: root, scala: "3.8", platform: jvm }
+          - { project: root, scala: "3.3", platform: jvm }
           - { project: rootJS2_12, scala: "2.12", platform: js }
           - { project: rootJS2_13, scala: "2.13", platform: js }
-          - { project: rootJS, scala: "3.8", platform: js }
+          - { project: rootJS, scala: "3.3", platform: js }
           - { project: rootNative2_12, scala: "2.12", platform: native }
           - { project: rootNative2_13, scala: "2.13", platform: native }
-          - { project: rootNative, scala: "3.8", platform: native }
+          - { project: rootNative, scala: "3.3", platform: native }
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
