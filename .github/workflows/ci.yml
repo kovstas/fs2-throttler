@@ -13,123 +13,88 @@ on:
 
 jobs:
   build:
-    name: Build and Test
+    name: ${{ matrix.target.platform }} / Scala ${{ matrix.target.scala }}
     strategy:
       matrix:
-        os: [ ubuntu-latest ]
-        scala: [ 2.12, 2.13, 3.3 ]
-        java: [ temurin@17 ]
-        project: [ rootJS, root, rootNative ]
-    runs-on: ${{ matrix.os }}
+        target:
+          - { project: root2_12, scala: "2.12", platform: jvm }
+          - { project: root2_13, scala: "2.13", platform: jvm }
+          - { project: root, scala: "3.8", platform: jvm }
+          - { project: rootJS2_12, scala: "2.12", platform: js }
+          - { project: rootJS2_13, scala: "2.13", platform: js }
+          - { project: rootJS, scala: "3.8", platform: js }
+          - { project: rootNative2_12, scala: "2.12", platform: native }
+          - { project: rootNative2_13, scala: "2.13", platform: native }
+          - { project: rootNative, scala: "3.8", platform: native }
+    runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
       - name: Checkout current branch (full)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
+
+      - name: Setup Java (temurin@25)
+        id: setup-java-temurin-25
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 25
+          cache: sbt
 
       - name: Setup sbt
         uses: sbt/setup-sbt@v1
 
-      - name: Setup Java (temurin@17)
-        id: setup-java-temurin-17
-        if: matrix.java == 'temurin@17'
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
-          cache: sbt
-
       - name: sbt update
-        if: matrix.java == 'temurin@17' && steps.setup-java-temurin-17.outputs.cache-hit == 'false'
-        run: sbt +update
+        if: steps.setup-java-temurin-25.outputs.cache-hit == 'false'
+        run: sbt '${{ matrix.target.project }}/update'
 
       - name: Install brew formulae (ubuntu)
-        if: (matrix.project == 'rootNative') && startsWith(matrix.os, 'ubuntu')
+        if: matrix.target.platform == 'native'
         run: /home/linuxbrew/.linuxbrew/bin/brew install openssl s2n
 
       - name: Check headers and formatting
-        if: matrix.java == 'temurin@17'
-        run: sbt 'project ${{ matrix.project }}' '++ ${{ matrix.scala }}' headerCheckAll scalafmtCheckAll 'project /' scalafmtSbtCheck
+        run: sbt '${{ matrix.target.project }}/headerCheckAll; ${{ matrix.target.project }}/scalafmtCheckAll; scalafmtSbtCheck'
 
       - name: scalaJSLink
-        if: matrix.project == 'rootJS'
-        run: sbt 'project ${{ matrix.project }}' '++ ${{ matrix.scala }}' Test/scalaJSLinkerResult
+        if: matrix.target.platform == 'js'
+        run: sbt '${{ matrix.target.project }}/Test/scalaJSLinkerResult'
 
       - name: nativeLink
-        if: matrix.project == 'rootNative'
-        run: sbt 'project ${{ matrix.project }}' '++ ${{ matrix.scala }}' Test/nativeLink
+        if: matrix.target.platform == 'native'
+        run: sbt '${{ matrix.target.project }}/Test/nativeLink'
 
       - name: Test
-        run: sbt 'project ${{ matrix.project }}' '++ ${{ matrix.scala }}' test
-
-      - name: Make target directories
-        if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main')
-        run: mkdir -p target .js/target .jvm/target .native/target project/target
-
-      - name: Compress target directories
-        if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main')
-        run: tar cf targets.tar target .js/target .jvm/target .native/target project/target
-
-      - name: Upload target directories
-        if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main')
-        uses: actions/upload-artifact@v4
-        with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-${{ matrix.scala }}-${{ matrix.project }}
-          path: targets.tar
-          key: ${{ runner.os }}-target-${{ matrix.os }}-${{ matrix.java }}-${{ matrix.scala }}-${{ matrix.project }}
+        run: sbt '${{ matrix.target.project }}/testFull'
 
   publish:
     name: Publish Artifacts
     needs: [ build ]
     if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main')
-    strategy:
-      matrix:
-        os: [ ubuntu-latest ]
-        java: [ temurin@17 ]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout current branch (full)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
-      - name: Setup Java (temurin@17)
-        id: setup-java-temurin-17
-        if: matrix.java == 'temurin@17'
-        uses: actions/setup-java@v4
+      - name: Setup Java (temurin@25)
+        id: setup-java-temurin-25
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 25
           cache: sbt
 
-      - name: Install sbt
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y apt-transport-https curl gnupg
-          echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | sudo tee /etc/apt/sources.list.d/sbt.list
-          echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | sudo tee /etc/apt/sources.list.d/sbt_old.list
-          curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | sudo apt-key add
-          sudo apt-get update
-          sudo apt-get install -y sbt
+      - name: Setup sbt
+        uses: sbt/setup-sbt@v1
 
       - name: sbt update
-        if: matrix.java == 'temurin@17' && steps.setup-java-temurin-17.outputs.cache-hit == 'false'
-        run: sbt +update
-
-      - name: Download and inflate target directories
-        run: |
-          for version in 3.3 2.12 2.13; do
-            for project in rootJS root rootNative; do
-              if [ -f "target-${{ matrix.os }}-${{ matrix.java }}-$version-$project.tar" ]; then
-                tar xf "target-${{ matrix.os }}-${{ matrix.java }}-$version-$project.tar"
-                rm "target-${{ matrix.os }}-${{ matrix.java }}-$version-$project.tar"
-              fi
-            done
-          done
+        if: steps.setup-java-temurin-25.outputs.cache-hit == 'false'
+        run: sbt update
 
       - name: Publish
-        run: sbt '++ ${{ matrix.scala }}' ci-release
+        run: sbt ci-release
         env:
           PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
           PGP_SECRET: ${{ secrets.PGP_SECRET }}

@@ -79,7 +79,7 @@ class MemoryLeakSpec extends FunSuite {
       ).map {
         case Left(_)            => ()
         case Right(Right(path)) => ()
-        case Right(Left(path)) =>
+        case Right(Left(path))  =>
           fail(s"leak detected - heap dump: $path")
       }.unsafeRunSync()
     }
