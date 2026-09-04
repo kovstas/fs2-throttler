@@ -1,4 +1,4 @@
-lazy val supportedScalaVersions = Seq("2.12.21", "2.13.18", "3.3.8")
+lazy val supportedScalaVersions = Seq("2.12.21", "3.9.0", "3.3.8")
 
 organization := "dev.kovstas"
 scalaVersion := "3.3.8"
