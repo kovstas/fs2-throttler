@@ -6,7 +6,7 @@ scalacOptions ++= scalaOptions(scalaVersion.value)
 
 libraryDependencies ++= Seq(
   "co.fs2" %% "fs2-core" % "3.13.0",
-  "org.scalameta" %% "munit" % "1.3.5" % Test,
+  "org.scalameta" %% "munit" % "1.3.6" % Test,
   "org.typelevel" %% "cats-effect-testkit" % "3.7.1" % Test
 )
 libraryDependencySchemes ++= Seq("2.12", "2.13", "3").map { binaryVersion =>
