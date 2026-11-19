@@ -5,7 +5,7 @@ scalaVersion := "3.9.0"
 scalacOptions ++= scalaOptions(scalaVersion.value)
 
 libraryDependencies ++= Seq(
-  "co.fs2" %% "fs2-core" % "3.14.0",
+  "co.fs2" %% "fs2-core" % "3.16.0",
   "org.scalameta" %% "munit" % "1.3.6" % Test,
   "org.typelevel" %% "cats-effect-testkit" % "3.7.1" % Test
 )
